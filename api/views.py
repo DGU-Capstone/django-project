@@ -27,13 +27,13 @@ class GetResult(APIView):
     lookup_url_kwargs = 'keyword'
 
     def get(self, request, format=None):
-        keyword = request.GET.get(self.lookup_url_kwargs)
+        keyword = request.GET.get('keyword')
+        #keyword = request.GET.get(self.lookup_url_kwargs)
         if keyword != None:
-            result = request.GET.get(self.lookup_url_kwargs)
+            result = Result.objects.filter(keyword=keyword)
             if len(result) > 0:
-                data = ""
                 for i in range(len(result)):
-                    data.append(ResultSerializer(result[i]).data)
+                    data = ResultSerializer(result[i]).data
                 return Response(data, status=status.HTTP_200_OK)
 
             return Response({'Result Not Found'}, status=status.HTTP_404_NOT_FOUND)
